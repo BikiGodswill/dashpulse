@@ -5,6 +5,7 @@ import { Sun, Moon, Bell, Shield, Palette, User, CreditCard, Save, Check } from 
 import { useTheme } from '@/components/ThemeProvider';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/helpers';
+import { useAuth } from '@/lib/authContext';
 
 const TABS = [
   { id: 'profile', label: 'Profile', icon: User },
@@ -50,9 +51,24 @@ export default function SettingsPage() {
   const [notifs, setNotifs] = useState({
     email: true, push: true, weekly: true, security: true, product: false,
   });
+  const { user, profile: authProfile } = useAuth();
   const [profile, setProfile] = useState({
-    name: 'Pro User', email: 'user@dashpulse.io', company: 'Acme Corp', timezone: 'UTC-5',
+    name: authProfile?.full_name || user?.user_metadata?.full_name || '',
+    email: authProfile?.email || user?.email || '',
+    company: authProfile?.company || user?.user_metadata?.company || '',
+    timezone: authProfile?.timezone || 'UTC',
   });
+  // Sync once authProfile loads
+  const [synced, setSynced] = useState(false);
+  if (authProfile && !synced) {
+    setProfile({
+      name: authProfile.full_name || user?.user_metadata?.full_name || '',
+      email: authProfile.email || user?.email || '',
+      company: authProfile.company || user?.user_metadata?.company || '',
+      timezone: authProfile.timezone || 'UTC',
+    });
+    setSynced(true);
+  }
   const [accentColor, setAccentColor] = useState('#00D4FF');
 
   const COLORS = ['#00D4FF', '#00E5A0', '#A78BFA', '#FFB347', '#FF4D6D', '#F472B6'];
