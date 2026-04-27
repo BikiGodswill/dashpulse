@@ -5,7 +5,8 @@ import { Bell, Search, Sun, Moon, ChevronDown, Settings, User, LogOut, X } from 
 import { useTheme } from '@/components/ThemeProvider';
 import { useAuth } from '@/lib/authContext';
 import { useRouter } from 'next/navigation';
-import { generateActivityFeed, timeAgo } from '@/lib/helpers';
+import { generateActivityFeed } from '@/lib/seedData';
+import { timeAgo } from '@/lib/helpers';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/helpers';
 
