@@ -12,13 +12,13 @@ import { useAuth } from '@/lib/authContext';
 import toast from 'react-hot-toast';
 
 const NAV = [
-  { label: 'Dashboard',    href: '/dashboard',                icon: LayoutDashboard },
-  { label: 'Analytics',    href: '/dashboard/analytics',      icon: BarChart3 },
-  { label: 'Revenue',      href: '/dashboard/revenue',        icon: TrendingUp },
-  { label: 'Users',        href: '/dashboard/users',          icon: Users },
-  { label: 'Transactions', href: '/dashboard/transactions',   icon: CreditCard },
-  { label: 'Reports',      href: '/dashboard/reports',        icon: FileText },
-  { label: 'Geography',    href: '/dashboard/geography',      icon: Globe },
+  { label: 'Dashboard',    href: '/dashboard',              icon: LayoutDashboard },
+  { label: 'Analytics',    href: '/dashboard/analytics',    icon: BarChart3 },
+  { label: 'Revenue',      href: '/dashboard/revenue',      icon: TrendingUp },
+  { label: 'Users',        href: '/dashboard/users',        icon: Users },
+  { label: 'Transactions', href: '/dashboard/transactions', icon: CreditCard },
+  { label: 'Reports',      href: '/dashboard/reports',      icon: FileText },
+  { label: 'Geography',    href: '/dashboard/geography',    icon: Globe },
 ];
 
 const BOTTOM = [
@@ -29,13 +29,11 @@ const BOTTOM = [
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
-  const { signOut, user, isDemo } = useAuth();
+  const { signOut, user, profile } = useAuth();
 
-  const displayName = isDemo
-    ? 'Demo User'
-    : (user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User');
+  const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
   const displayInitial = displayName[0]?.toUpperCase() || 'U';
-  const displayPlan = isDemo ? 'Demo Mode' : 'Pro Plan';
+  const displayEmail = user?.email || '';
 
   async function handleLogout() {
     await signOut();
@@ -77,7 +75,7 @@ export default function Sidebar() {
         {collapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
       </button>
 
-      {/* Nav links */}
+      {/* Nav */}
       <nav className="flex-1 px-2 py-4 space-y-0.5 overflow-y-auto overflow-x-hidden">
         {NAV.map(({ label, href, icon: Icon }) => {
           const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
@@ -94,7 +92,7 @@ export default function Sidebar() {
 
       <div className="mx-2 divider" />
 
-      {/* Bottom links */}
+      {/* Bottom */}
       <div className="px-2 py-3 space-y-0.5">
         {BOTTOM.map(({ label, href, icon: Icon }) => (
           <Link key={href} href={href}
@@ -126,7 +124,7 @@ export default function Sidebar() {
                 {displayName}
               </p>
               <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>
-                {displayPlan}
+                {displayEmail}
               </p>
             </div>
           </div>

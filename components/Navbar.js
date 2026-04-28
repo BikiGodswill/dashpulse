@@ -12,24 +12,23 @@ const notifications = generateActivityFeed(6);
 
 export default function Navbar({ title = 'Dashboard' }) {
   const { theme, toggleTheme } = useTheme();
-  const { user, profile, isDemo, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
 
-  const [notifOpen, setNotifOpen]   = useState(false);
+  const [notifOpen, setNotifOpen]     = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen]   = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
   const notifRef   = useRef(null);
   const profileRef = useRef(null);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
-    function onClickOutside(e) {
+    function onOutsideClick(e) {
       if (notifRef.current && !notifRef.current.contains(e.target)) setNotifOpen(false);
       if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
     }
-    document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
+    document.addEventListener('mousedown', onOutsideClick);
+    return () => document.removeEventListener('mousedown', onOutsideClick);
   }, []);
 
   async function handleLogout() {
@@ -38,17 +37,15 @@ export default function Navbar({ title = 'Dashboard' }) {
     window.location.href = '/';
   }
 
-  const displayName = isDemo
-    ? 'Demo User'
-    : (profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User');
+  const displayName    = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
   const displayInitial = displayName[0]?.toUpperCase() || 'U';
-  const displayPlan = isDemo ? 'Demo' : 'Pro';
+  const displayEmail   = user?.email || '';
 
   return (
     <header className="h-16 flex items-center justify-between px-6 border-b flex-shrink-0"
       style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
 
-      {/* Left: page title */}
+      {/* Left */}
       <div>
         <h1 className="heading-font text-base" style={{ color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
           {title}
@@ -58,20 +55,17 @@ export default function Navbar({ title = 'Dashboard' }) {
         </p>
       </div>
 
-      {/* Right: actions */}
+      {/* Right */}
       <div className="flex items-center gap-2">
 
         {/* Search */}
         <div className="relative">
           {searchOpen ? (
             <div className="flex items-center gap-2 animate-fade-in">
-              <input
-                autoFocus
-                value={searchValue}
+              <input autoFocus value={searchValue}
                 onChange={e => setSearchValue(e.target.value)}
                 placeholder="Search anything…"
-                className="input-field w-52 h-9 text-xs"
-              />
+                className="input-field w-52 h-9 text-xs" />
               <button onClick={() => { setSearchOpen(false); setSearchValue(''); }}
                 className="btn-ghost h-9 w-9 p-0 justify-center">
                 <X size={15} />
@@ -84,7 +78,7 @@ export default function Navbar({ title = 'Dashboard' }) {
           )}
         </div>
 
-        {/* Theme toggle */}
+        {/* Theme */}
         <button onClick={toggleTheme} className="btn-ghost h-9 w-9 p-0 justify-center" title="Toggle theme">
           {theme === 'dark'
             ? <Sun size={16} style={{ color: '#FFB347' }} />
@@ -141,7 +135,7 @@ export default function Navbar({ title = 'Dashboard' }) {
                 {displayName}
               </p>
               <p className="text-xs leading-none mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                {displayPlan}
+                {displayEmail}
               </p>
             </div>
             <ChevronDown size={13} style={{ color: 'var(--text-muted)' }} />

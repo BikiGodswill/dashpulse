@@ -212,9 +212,8 @@ export default function LandingPage() {
             <Link href="/auth/register" className="btn-primary text-base px-7 py-3.5 gap-2.5 animate-glow">
               Start for free <ArrowRight size={18} />
             </Link>
-            <Link href="/dashboard" className="btn-ghost text-base px-6 py-3.5 gap-2">
-              <Activity size={16} />
-              Live demo
+            <Link href="/auth/login" className="btn-ghost text-base px-6 py-3.5 gap-2">
+              Sign in
             </Link>
           </div>
 
@@ -442,8 +441,8 @@ export default function LandingPage() {
               <Link href="/auth/register" className="btn-primary text-base px-8 py-3.5 gap-2">
                 Start for free <ArrowRight size={18} />
               </Link>
-              <Link href="/dashboard" className="btn-ghost text-base px-8 py-3.5 gap-2">
-                <Activity size={16} /> See live demo
+              <Link href="/auth/login" className="btn-ghost text-base px-8 py-3.5 gap-2">
+                Sign in <ArrowRight size={18} />
               </Link>
             </div>
           </div>
